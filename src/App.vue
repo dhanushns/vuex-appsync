@@ -1,26 +1,62 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="root-model">
+    <div class="title">
+      <h2>Employee Management</h2>
+    </div>
+    <div class="sep">
+      <div class="left-model child-model">
+        <FilterComponent />
+        <TableComponent />
+      </div>
+      <div class="right-model child-model">
+        <EmployeeManagement />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import EmployeeManagement from './components/EmployeeManagement.vue';
+import FilterComponent from './components/FilterComponent.vue';
+import TableComponent from './components/TableComponent.vue';
+
 
 export default {
   name: 'App',
+  data(){
+    return {
+
+    }
+  },
   components: {
-    HelloWorld
-  }
+    TableComponent,
+    FilterComponent,
+    EmployeeManagement
+  },
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 40px 10px;
+}
+
+.sep {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  .child-model {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 300px;
+     flex-basis:content;
+  }
+
 }
 </style>
