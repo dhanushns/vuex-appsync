@@ -1,7 +1,8 @@
 <template>
+    <FilterComponent @searchKey="searchEvent" />
     <div class="table">
-        <LoadingComponent v-show="isLoading" />
-        <table class="record-table" v-show="!isLoading">
+        <LoadingComponent v-show="setLoading" />
+        <table class="record-table">
             <thead>
                 <tr>
                     <th>S.NO</th>
@@ -14,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(employee, index) of getEmployees" :key="employee.id" :id="employee.id"
+                <tr v-for="(employee, index) of getEmployees(searchKeyValue)" :key="employee.id" :id="employee.id"
                     @click="setEmployee(employee.id)" :class="selectedRow === employee.id ? 'activeRow' : ''">
                     <td>{{ index + 1 }}</td>
                     <td>{{ employee.id }}</td>
@@ -26,35 +27,46 @@
                 </tr>
             </tbody>
         </table>
+        <div class="empty-emp-list" style="text-align : center; color: red;"
+            v-show="searchKeyValue !== '' && getEmployees(searchKeyValue).length === 0">
+            <p>No employee found !</p>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import LoadingComponent from './LoadingComponent.vue';
+import FilterComponent from './FilterComponent.vue';
 
 export default {
     name: "TableComponent",
     components: {
-        LoadingComponent
+        LoadingComponent,
+        FilterComponent
     },
 
     data() {
         return {
             selectedRow: '',
-            selectedEmployee: {}
+            selectedEmployee: {},
+            searchKeyValue: '',
+            setLoading: false
         }
     },
     computed: {
-        ...mapGetters(['getEmployees', 'isLoading', 'getRefreshEvent']),
+        ...mapGetters(['getEmployees', 'getRefreshEvent']),
         refreshComponent() {
             return this.getRefreshEvent;
-        }
+        },
     },
     watch: {
-        refreshComponent(newValue) {
-            if(newValue === true){
-                this.fetchAllEmployeesAction();
+        async refreshComponent(newValue) {
+            if (newValue === true) {
+                this.setLoading = true
+                await this.fetchAllEmployeesAction();
+                this.setLoading = false
+                this.selectedRow = ''
             }
         }
     },
@@ -62,12 +74,17 @@ export default {
         ...mapActions(["fetchAllEmployeesAction", "setEmployeeAction"]),
         setEmployee(emp_id) {
             this.selectedRow = emp_id;
-            const employee = this.getEmployees.filter((emp) => emp.id === emp_id)[0]
+            const employee = this.getEmployees('').filter((emp) => emp.id === emp_id)[0]
             this.setEmployeeAction(employee);
-        }
+        },
+        searchEvent(event) {
+            this.searchKeyValue = event.target.value
+        },
     },
-    created() {
-        this.fetchAllEmployeesAction();
+    async created() {
+        this.setLoading = true
+        await this.fetchAllEmployeesAction();
+        this.setLoading = false
     }
 
 }
@@ -76,12 +93,25 @@ export default {
 <style scoped>
 .table {
     position: relative;
+    min-width: 300px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    border: 2px solid #dfdfdf;
+    border-radius: 20px;
+    max-height: 700px;
     min-height: 400px;
+    overflow-y: scroll;
 }
 
 .record-table {
     border-collapse: collapse;
     border-spacing: 0;
+    width: 100%;
+
+    thead {
+        position: sticky;
+        top: 0;
+    }
 }
 
 th {
@@ -99,12 +129,8 @@ th:last-child {
 
 th,
 td {
-    padding: 20px;
+    padding: 30px;
     text-align: center;
-}
-
-tbody {
-    border: 2px solid #dfdfdf;
 }
 
 tbody tr:hover {

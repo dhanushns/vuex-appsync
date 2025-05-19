@@ -5,7 +5,6 @@
     </div>
     <div class="sep">
       <div class="left-model child-model">
-        <FilterComponent />
         <TableComponent />
       </div>
       <div class="right-model child-model">
@@ -17,7 +16,6 @@
 
 <script>
 import EmployeeManagement from './components/EmployeeManagement.vue';
-import FilterComponent from './components/FilterComponent.vue';
 import TableComponent from './components/TableComponent.vue';
 
 
@@ -30,7 +28,6 @@ export default {
   },
   components: {
     TableComponent,
-    FilterComponent,
     EmployeeManagement
   },
 }
@@ -45,17 +42,32 @@ export default {
   margin: 40px 10px;
 }
 
+.title{
+  text-align: center;
+}
+
 .sep {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
 
   .child-model {
     display: flex;
     flex-direction: column;
     gap: 20px;
     min-width: 300px;
-     flex-basis:content;
+  }
+
+  .left-model{
+    flex-basis: 50%;
+  }
+
+  .right-model{
+    position: sticky;
+    top: 0;
+    align-self:flex-start;
   }
 
 }
