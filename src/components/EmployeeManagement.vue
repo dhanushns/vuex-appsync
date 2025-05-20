@@ -119,12 +119,24 @@ export default {
           this.setNotify = true;
           this.closeNotification()
         }
+        else {
+          this.notifyContent = "Employee Id already exsist"
+          this.notifyColor = "red"
+          this.setNotify = true;
+          this.closeNotification()
+        }
 
       } else if (this.selectedAction === "edit") {
         const isUpdted = await this.$store.dispatch("updateEmployeeAction", this.employee);
         if (isUpdted) {
           this.notifyContent = "Employee Updated Successfully"
           this.notifyColor = "green"
+          this.setNotify = true;
+          this.closeNotification()
+        }
+        else {
+          this.notifyContent = "Employee updation failure"
+          this.notifyColor = "red"
           this.setNotify = true;
           this.closeNotification()
         }
@@ -150,6 +162,12 @@ export default {
       const isDeleted = await this.$store.dispatch("deleteEmployeeAction", this.employee.id);
       if (isDeleted) {
         this.notifyContent = "Employee Deleted Successfully"
+        this.notifyColor = "green"
+        this.setNotify = true;
+        this.closeNotification()
+      }
+      else {
+        this.notifyContent = "Delete operation failed"
         this.notifyColor = "red"
         this.setNotify = true;
         this.closeNotification()
@@ -187,7 +205,7 @@ export default {
       border-radius: 10px;
     }
 
-    .button:hover{
+    .button:hover {
       background-color: rgb(230, 230, 230);
       box-shadow: 2px 2px 10px 1px rgba(0, 0, 0, 0.103);
     }

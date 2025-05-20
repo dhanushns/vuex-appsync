@@ -45,15 +45,20 @@ const actions = {
 
   async createEmployeeAction({ commit }, employee) {
     const newEmployee = await service.createEmployee(employee)
-    commit('ADD_EMPLOYEE', newEmployee)
-    return true
+    if (newEmployee) {
+      commit('ADD_EMPLOYEE', newEmployee)
+      return true
+    }
+    return false
   },
 
   async updateEmployeeAction({ commit }, employee) {
     const updatedEmployee = await service.updateEmployee(employee)
-    commit('UPDATE_EMPLOYEE', updatedEmployee)
-    console.log(state.employees)
-    return true
+    if (updatedEmployee) {
+      commit('UPDATE_EMPLOYEE', updatedEmployee)
+      return true
+    }
+    return false
   },
 
   async deleteEmployeeAction({ commit }, emp_id) {
