@@ -159,7 +159,7 @@ export default {
     },
     async deleteEmployee() {
       this.setLoading = true
-      const isDeleted = await this.$store.dispatch("deleteEmployeeAction", this.employee.id);
+      const isDeleted = this.employee.id ? await this.$store.dispatch("deleteEmployeeAction", this.employee.id) : false
       if (isDeleted) {
         this.notifyContent = "Employee Deleted Successfully"
         this.notifyColor = "green"
